@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "eslint": "^9.17.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3"
   }
 }
