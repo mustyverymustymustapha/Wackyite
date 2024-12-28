@@ -1,4 +1,5 @@
 const { Events, MessageFlags } = require('discord.js');
+const { cooldowns } = interaction.client;
 
 module.exports = {
     name: Events.InteractionCreate,
