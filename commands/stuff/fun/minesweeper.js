@@ -2,31 +2,28 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = re
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName('minesweeper')
-    .setDescription('Play a game of Minesweeper!')
-    .addIntegerOption(option =>
-        option
-        .setName('rows')
-        .setDescription('Number of rows for the board (max 8).')
-        .setMinValue(2)
-        .setMaxValue(8)
-        .setRequired(false)
-    )
-    .addIntegerOption(option =>
-        option
-        .setName('columns')
-        .setDescription('Number of columns for the board (max 8).')
-        .setMinValue(2)
-        .setMaxValue(8)
-        .setRequired(false)
-    )
-    .addIntegerOption(option =>
-        option
-        .setName('mines')
-        .setDescription('Number of mines on the board.')
-        .setMinValue(1)
-        .setRequired(false)
-    ),
+        .setName('minesweeper')
+        .setDescription('Play a game of Minesweeper!')
+        .addIntegerOption(option =>
+            option.setName('rows')
+                .setDescription('Number of rows for the board (max 8).')
+                .setMinValue(2)
+                .setMaxValue(8)
+                .setRequired(false)
+        )
+        .addIntegerOption(option =>
+            option.setName('columns')
+                .setDescription('Number of columns for the board (max 8).')
+                .setMinValue(2)
+                .setMaxValue(8)
+                .setRequired(false)
+        )
+        .addIntegerOption(option =>
+            option.setName('mines')
+                .setDescription('Number of mines on the board.')
+                .setMinValue(1)
+                .setRequired(false)
+        ),
 
     async execute(interaction) {
         const rows = interaction.options.getInteger('rows') || 5;
@@ -83,7 +80,7 @@ module.exports = {
                     revealAllMines(hiddenBoard, board, true);
                     await buttonInteraction.update({
                         content: '🎉 **You win! All safe cells revealed!**',
-                        compponents: createBoardButtons(hiddenBoard, rows, columns),
+                        components: createBoardButtons(hiddenBoard, rows, columns),
                     });
                 } else {
                     await buttonInteraction.update({
@@ -134,6 +131,26 @@ function createHiddenBoard(rows, columns) {
     return Array.from({ length: rows }, () => Array(columns).fill('⬜'));
 }
 
+function createBoardButtons(hiddenBoard, rows, columns) {
+    const actionRows = [];
+    
+    for (let r = 0; r < rows; r++) {
+        const row = new ActionRowBuilder();
+        for (let c = 0; c < columns; c++) {
+            row.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`${r}-${c}`)
+                    .setLabel(hiddenBoard[r][c] === 0 ? ' ' : String(hiddenBoard[r][c]))
+                    .setStyle(hiddenBoard[r][c] === '⬜' ? ButtonStyle.Secondary : ButtonStyle.Primary)
+                    .setDisabled(hiddenBoard[r][c] !== '⬜')
+            );
+        }
+        actionRows.push(row);
+    }
+
+    return actionRows;
+}
+
 function revealCell(hiddenBoard, board, row, column) {
     if (hiddenBoard[row]?.[column] !== '⬜' || board[row]?.[column] === undefined) {
         return 0;
@@ -153,3 +170,12 @@ function revealCell(hiddenBoard, board, row, column) {
     return revealed;
 }
 
+function revealAllMines(hiddenBoard, board, won = false) {
+    for (let r = 0; r < board.length; r++) {
+        for (let c = 0; c < board[r].length; c++) {
+            if (board[r][c] === '💣') {
+                hiddenBoard[r][c] = won ? '✅' : '💣';
+            }
+        }
+    }
+}
