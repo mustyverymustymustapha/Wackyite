@@ -1,3 +1,4 @@
+![IMG_0294](https://github.com/user-attachments/assets/0601805f-449e-4edc-beda-06dcb346d207)
 # Wackyite - Your Fun, Wacky Discord Companion!
 
 Welcome to **Wackyite**, the ultimate Discord bot designed to bring fun, chaos, and a whole lot of wackiness to your server! Whether you're looking to play games, get random memes, challenge your friends to a wacky coin flip, or even generate hilarious roasts, Wackyite has it all!
